@@ -1,0 +1,22 @@
+{
+  "name": "jest_tutorial",
+  "version": "1.0.0",
+  "description": "- Jest Tutorial",
+  "main": "index.js",
+  "scripts": {
+    "test": "jest"
+  },
+  "repository": {
+    "type": "git",
+    "url": "git+https://github.com/ssi02014/Jest_Tutorial.git"
+  },
+  "author": "",
+  "license": "ISC",
+  "bugs": {
+    "url": "https://github.com/ssi02014/Jest_Tutorial/issues"
+  },
+  "homepage": "https://github.com/ssi02014/Jest_Tutorial#readme",
+  "dependencies": {
+    "jest": "^27.3.1"
+  }
+}
