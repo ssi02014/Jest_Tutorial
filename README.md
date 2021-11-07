@@ -22,6 +22,13 @@
 
 ## 🔖 예제1
 ```js
+  const fn = {
+    add: (num1, num2) => num1 + num2,
+  };
+
+  module.exports = fn;
+```
+```js
   const fn = require("./fn");
 
   test("1은 1이야", () => {
