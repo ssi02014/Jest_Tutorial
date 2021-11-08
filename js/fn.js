@@ -7,6 +7,9 @@ const fn = {
       gender: undefined,
     };
   },
+  throwErr: () => {
+    throw new Error("error");
+  },
 };
 
 module.exports = fn;

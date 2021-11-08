@@ -65,3 +65,33 @@ test("ID는 10자 이하여야 합니다.", () => {
   const id = "THE_BLACK";
   expect(id.length).toBeGreaterThan(5);
 });
+
+// 숫자 주의 할 점
+test("0.1더하기 0.2는 0.3이다.", () => {
+  expect(fn.add(0.1, 0.2)).toBeCloseTo(0.3);
+});
+
+test("Hello World에 H라는 글자가 있나?", () => {
+  expect("Hello World").toMatch(/H/); // /H/ 뒤에 i를 붙이면 대소문자 구분이 없어진다.
+});
+
+test("Hello World에 H라는 글자가 있나?", () => {
+  expect("Hello World").toMatch(/h/i); // /h/ 뒤에 i를 붙이면 대소문자 구분이 없어진다.
+});
+
+// toContain
+test("Hello World에 H라는 글자가 있나?", () => {
+  const user = "Mike";
+  const userList = ["Tom", "Mike", "Kai"];
+
+  expect(userList).toContain(user);
+});
+
+// toThrow
+test("이거 에러가 나나요?", () => {
+  expect(() => fn.throwErr()).toThrow();
+});
+
+test("이거 에러가 나나요?", () => {
+  expect(() => fn.throwErr()).toThrow("error");
+});
