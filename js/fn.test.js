@@ -30,6 +30,7 @@ test("이름과 나이를 전달받아서 객체를 반환해줘", () => {
   });
 });
 
+// toBeNull, toBeUndefined, toBeDefined
 const x = 1;
 
 test("null은 null이다.", () => {
@@ -42,4 +43,25 @@ test("undefined는 undefined이다.", () => {
 
 test("x는 정의되어 있다.", () => {
   expect(x).toBeDefined();
+});
+
+// toBeTruthy, toBeFalsy
+test("0은 false이다.", () => {
+  expect(fn.add(1, -1)).toBeFalsy();
+});
+
+test("1은 true이다.", () => {
+  expect(fn.add(2, -1)).toBeTruthy();
+});
+
+// toBeGreaterThan, toBeGreaterThanOrEqual, toBeLessThan, toBeLessThanOrEqual
+
+test("ID는 10자 이하여야 합니다.", () => {
+  const id = "THE_BLACK";
+  expect(id.length).toBeLessThanOrEqual(10);
+});
+
+test("ID는 10자 이하여야 합니다.", () => {
+  const id = "THE_BLACK";
+  expect(id.length).toBeGreaterThan(5);
 });
