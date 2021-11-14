@@ -27,6 +27,7 @@
 
 ### 1. toBe 
 ```js
+  // fn.js
   const fn = {
     add: (num1, num2) => num1 + num2,
   };
@@ -34,6 +35,7 @@
   module.exports = fn;
 ```
 ```js
+  // fn.test.js
   const fn = require("./fn");
 
   test("1은 1이야", () => {
@@ -51,6 +53,7 @@
 
 ### 2. toEqual
 ```js
+  // fn.js
   const fn = {
     add: (num1, num2) => num1 + num2,
     makeUser: (name, age) => {
@@ -63,8 +66,7 @@
   module.exports = fn;
 ```
 ```js
-  const fn = require("./fn");
-
+  // fn.test.js
   test("2더하기 3은 5야", () => {
     expect(fn.add(2, 3)).toEqual(5);
   });
@@ -84,6 +86,7 @@
 
 ### 3. toStrictEqual
 ```js
+  // fn.js
   const fn = {
     add: (num1, num2) => num1 + num2,
     makeUser: (name, age) => {
@@ -97,6 +100,7 @@
   module.exports = fn;
 ```
 ```js
+  // fn.test.js
   const fn = require("./fn");
 
   test("이름과 나이를 전달받아서 객체를 반환해줘", () => {
@@ -120,6 +124,7 @@
 
 ### 4. toBeNull, toBeUndefined, toBeDefined
 ```js
+  // fn.test.js
   test("null은 null이다.", () => {
     expect(null).toBeNull();
   });
@@ -141,6 +146,7 @@
 
 ### 5. toBeTruthy, toBeFalsy
 ```js
+  // fn.test.js
   //fn은 위에 예제 코드 참고
   test("0은 false이다.", () => {
     expect(fn.add(1, -1)).toBeFalsy();
@@ -157,6 +163,7 @@
 
 ### 6. toBeGreaterThan, toBeGreaterThanOrEqual, toBeLessThan, toBeLessThanOrEqual
 ```js
+  // fn.test.js
   test("ID는 10자 이하여야 합니다.", () => {
     const id = "THE_BLACK";
     expect(id.length).toBeGreaterThan(5);
@@ -176,6 +183,7 @@
 
 ### 7. toBeCloseTo
 ```js
+  // fn.test.js
   test("0.1더하기 0.2는 0.3dlek.", () => {
     expect(fn.add(0.1, 0.2)).toBeCloseTo(0.3);
   });
@@ -187,6 +195,7 @@
 
 ### 8. toMatch
 ```js
+  // fn.test.js
   test("Hello World에 H라는 글자가 있나?", () => {
     expect("Hello World").toMatch(/H/); // /H/ 뒤에 i를 붙이면 대소문자 구분이 없어진다.
   });
@@ -201,6 +210,7 @@
 
 ### 9. toContain
 ```js
+  // fn.test.js
   test("Hello World에 H라는 글자가 있나?", () => {
     const user = "Mike";
     const userList = ["Tom", "Mike", "Kai"];
@@ -224,6 +234,7 @@
   module.exports = fn;
 ```
 ```js
+  // fn.test.js
   test("이거 에러가 나나요?", () => {
     expect(() => fn.throwErr()).toThrow();
   });
@@ -234,5 +245,121 @@
 ```
 - `throwErr`는 에러가 발생하면 테스트가 통과된다.
 - 만약 `thThrow` 인수로 특정 요소를 넣으면 비교를해서 출력값과 인수가 같으면 테스트가 통과한다.
+
+<br />
+
+## 🔖 비동기 코드 테스트
+### 1. 기본 예제
+```js
+  // fnAsync.js
+  const fnAsync = {
+    add: (num1, num2) => num1 + num2,
+    getName: (callback) => {
+      const name = "Mike";
+      setTimeout(() => {
+        callback(name);
+      }, 3000);
+    },
+  };
+
+  module.exports = fnAsync;
+```
+```js
+  // fnAsync.test.js
+  test("3초 후에 받아온 이름은 Mike", () => {
+    const callback = (name) => {
+      expect(name).toBe("Mike");
+    };
+    fn.getName(callback);
+  });
+```
+- 위 예제처럼 실행하면 jest는 코드 끝에 다다르면 그냥 코드가 종료된다.
+
+<br />
+
+```js
+  // fnAsync.test.js
+  test("3초 후에 받아온 이름은 Mike", (done) => {
+    const callback = (name) => {
+      expect(name).toBe("Mike");
+      done();
+    };
+    fn.getName(callback);
+  });
+```
+- 위 예제처럼 test 메서드에 두번째 파라미터 콜백함수에 파라미터로 `done`을 넣고 이 done이 호출되면 종료되게끔 작성하면 제대로 비동기 코드 테스트가 가능해진다.
+- 만약 `done`을 파라미터로 넣고 사용하지 않으면 테스트는 실패하게 된다.
+
+<br />
+
+### 2. try/catch
+```js
+  // fnAsync.test.js
+  test("3초 후에 받아온 이름은 Mike", (done) => {
+    const callback = (name) => {
+      try {
+        expect(name).toBe("Mike");
+        done();
+      } catch (e) {
+        done();
+      }
+    };
+    fn.getName(callback);
+  });
+```
+- 만약 API 에러를 감지하고 싶다면 `try/catch`를 사용하면 된다.
+
+<br />
+
+### 3. Promise 후속 처리 메서드
+```js
+  // fnAsync.js
+  const fnAsync = {
+    // ...
+    getAge: () => {
+      const age = 27;
+      return new Promise((res, rej) => {
+        setTimeout(() => {
+          res(age); 
+          // rej("error");
+        }, 3000);
+      });
+    },
+  };
+  module.exports = fnAsync;
+```
+```js
+  // fnAsync.test.js
+  test("3초 후에 받아온 나이는 27", () => {
+    return fn.getAge().then((age) => {
+      expect(age).toBe(27);
+    });
+  });
+
+  // 위 예제보다 좀 더 간결한 resolves, rejects를 사용한 코드
+  test("3초 후에 받아온 나이는 27", () => {
+    return expect(fn.getAge()).resolves.toBe(27);
+  });
+
+  test("3초 후에 에러가 발생합니다.", () => {
+    return expect(fn.getAge()).rejects.toMatch("error");
+  });
+```
+- Promise 코드를 테스트할 때는 `return`을 꼭 사용해야 한다. 안그러면 제대로 된 테스트가 불가능!
+
+<br />
+
+### 4. async/await
+```js
+  // fnAsync.test.js
+  test("3초 후에 받아온 나이는 27", async () => {
+    const age = await fn.getAge();
+    expect(age).toBe(30);
+  });
+
+  test("3초 후에 받아온 나이는 27", async () => {
+    await expect(fn.getAge()).resolves.toBe(27);
+  });
+```
 
 <br />
