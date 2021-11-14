@@ -1,5 +1,4 @@
-# Jest Tutorial
-<br />
+# 💻 Jest Tutorial
 
 ## 📑 시작
 ### 패키지 설치
