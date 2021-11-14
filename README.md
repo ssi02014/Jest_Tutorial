@@ -25,7 +25,7 @@
 
 <br />
 
-### 1. toBe 
+### 🏃‍♂️ 1. toBe 
 ```js
   // fn.js
   const fn = {
@@ -51,7 +51,7 @@
 
 <br />
 
-### 2. toEqual
+### 🏃‍♂️ 2. toEqual
 ```js
   // fn.js
   const fn = {
@@ -84,7 +84,7 @@
 
 <br />
 
-### 3. toStrictEqual
+### 🏃‍♂️ 3. toStrictEqual
 ```js
   // fn.js
   const fn = {
@@ -122,7 +122,7 @@
 
 <br />
 
-### 4. toBeNull, toBeUndefined, toBeDefined
+### 🏃‍♂️ 4. toBeNull, toBeUndefined, toBeDefined
 ```js
   // fn.test.js
   test("null은 null이다.", () => {
@@ -144,7 +144,7 @@
 
 <br />
 
-### 5. toBeTruthy, toBeFalsy
+### 🏃‍♂️ 5. toBeTruthy, toBeFalsy
 ```js
   // fn.test.js
   //fn은 위에 예제 코드 참고
@@ -161,7 +161,7 @@
 
 <br />
 
-### 6. toBeGreaterThan, toBeGreaterThanOrEqual, toBeLessThan, toBeLessThanOrEqual
+### 🏃‍♂️ 6. toBeGreaterThan, toBeGreaterThanOrEqual, toBeLessThan, toBeLessThanOrEqual
 ```js
   // fn.test.js
   test("ID는 10자 이하여야 합니다.", () => {
@@ -181,7 +181,7 @@
 
 <br />
 
-### 7. toBeCloseTo
+### 🏃‍♂️ 7. toBeCloseTo
 ```js
   // fn.test.js
   test("0.1더하기 0.2는 0.3dlek.", () => {
@@ -193,7 +193,7 @@
 
 <br />
 
-### 8. toMatch
+### 🏃‍♂️ 8. toMatch
 ```js
   // fn.test.js
   test("Hello World에 H라는 글자가 있나?", () => {
@@ -208,7 +208,7 @@
 
 <br />
 
-### 9. toContain
+### 🏃‍♂️ 9. toContain
 ```js
   // fn.test.js
   test("Hello World에 H라는 글자가 있나?", () => {
@@ -222,7 +222,7 @@
 
 <br />
 
-### 10. toThrow
+### 🏃‍♂️ 10. toThrow
 ```js
   const fn = {
     // ...
@@ -249,7 +249,7 @@
 <br />
 
 ## 🔖 비동기 코드 테스트
-### 1. 기본 예제
+### 🏃‍♂️ 1. 기본 예제
 ```js
   // fnAsync.js
   const fnAsync = {
@@ -292,7 +292,7 @@
 
 <br />
 
-### 2. try/catch
+### 🏃‍♂️ 2. try/catch
 ```js
   // fnAsync.test.js
   test("3초 후에 받아온 이름은 Mike", (done) => {
@@ -311,7 +311,7 @@
 
 <br />
 
-### 3. Promise 후속 처리 메서드
+### 🏃‍♂️ 3. Promise 후속 처리 메서드
 ```js
   // fnAsync.js
   const fnAsync = {
@@ -349,7 +349,7 @@
 
 <br />
 
-### 4. async/await
+### 🏃‍♂️ 4. async/await
 ```js
   // fnAsync.test.js
   test("3초 후에 받아온 나이는 27", async () => {
