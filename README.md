@@ -478,7 +478,7 @@
 
 <br />
 
-## 🔖 Mock
+## 🔖 Mockup
 ### 🏃‍♂️ 1. mockFn.mock.calls
 ```js
   //fnMock.test.js
@@ -631,5 +631,74 @@
 - toBeCalledTimes는 정확하게 호출 횟수가 맞으면 테스트가 통과된다.
 - toBeCalledWith는 인수로 어떤 값을 받았는지 체크한다.
 - lastCalledWith는 toBeCalledWith는처럼 인수로 어떤 값을 받았는지 체크하지만 맨 마지막으로 호출 된 함수만 체크한다.
+
+<br />
+
+## 🔖 React Components
+- React Testing Library는 매우 심플하지만 강력한 API를 갖고 있다.
+- DOM컴포넌트를 랜더링해주는 render() 함수와, 특정 이벤트를 발생시켜주는 fireEvent 객체, 그리고 DOM에서 특정 영역을 선택하기 위한 다양한 쿼리 함수들이 존재한다.
+
+```js
+  import { render, fireEvent, screen } from "@testing-library/react";
+```
+- `@testing-library/react` 모듈로 부터 바로 import가 가능하다.
+
+<br />
+
+### 🏃‍♂️ 1. toBeInTheDocument()
+```js
+  const user = {
+    name: "Tom",
+    age: 27,
+  };
+
+  test("Hello 라는 글자가 포함되는가?", () => {
+    render(<Hello user={user} />);
+    const helloEl = screen.getByText(/Hello/i);
+    expect(helloEl).toBeInTheDocument();
+  });
+```
+- getByText는 텍스트를 검사한다.
+- toBeInTheDocument는 검사하려는 요소가 문서에 있는지 여부를 확인하기 위한 메서드이다.
+
+<br />
+
+### 🏃‍♂️ 2. toMatchSnapshot
+```js
+  const user = {
+    name: "Tom",
+    age: 27,
+  };
+
+  const user2 = {
+    age: 30,
+  };
+
+  test("snapshot: name있음", () => {
+    const el = render(<Hello user={user} />);
+    expect(el).toMatchSnapshot();
+  });
+
+  test("snapshot: name없음", () => {
+    const el = render(<Hello user={user2} />);
+    expect(el).toMatchSnapshot();
+  });
+```
+- 스냅샷 테스팅(Snapshot testing)이란 어떤 기능의 예상 결과를 미리 정확히 포착해두고 실제 결과에 비교하는 테스트 기법이다.
+- 테스트 대상 기능의 구현이 변경되어 실제 결과가 스냅샷을 떠놓은 예상 결과와 달라질 경우 해당 테스트 케이스는 실패하게 된다.
+- 이러한 경우 다시 새로운 스냅샷을 떠서 기존 스냅샷을 교체하는 방식으로 테스트 코드와 함께 스냅샷도 함께 유지보수를 한다.
+- Jest에서는 파일 스냅샷 테스팅을 지원하기 위해서 `toMatchSnapshot()`이라는 함수를 제공한다.
+
+<br />
+
+### 🏃‍♂️ 3. Mockup
+```js
+  test("초 표시", () => {
+    Date.now = jest.fn(() => 123456789);
+    const el = render(<Timer />);
+    expect(el).toMatchSnapshot();
+  });
+```
+- 시간처럼 매번 값이 바껴서 테스트를 할 때마다 오류가 발생하는 부분은 mock함수를 이용해서 고정값을 주면 된다.
 
 <br />
