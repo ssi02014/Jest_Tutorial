@@ -4,14 +4,50 @@ const fnAsync = {
     const name = "Mike";
     setTimeout(() => {
       callback(name);
-    }, 3000);
+    }, 500);
   },
   getAge: () => {
     const age = 27;
     return new Promise((res, rej) => {
       setTimeout(() => {
         res(age);
-      }, 3000);
+      }, 500);
+    });
+  },
+  connectUserDB: () => {
+    return new Promise((res, rej) => {
+      setTimeout(() => {
+        res({
+          name: "Minjae",
+          age: "27",
+          gender: "male",
+        });
+      }, 500);
+    });
+  },
+  disconnectDB: () => {
+    return new Promise((res, rej) => {
+      setTimeout(() => {
+        res();
+      }, 500);
+    });
+  },
+  connectCarDB: () => {
+    return new Promise((res, rej) => {
+      setTimeout(() => {
+        res({
+          brend: "bmw",
+          name: "z4",
+          color: "red",
+        });
+      }, 500);
+    });
+  },
+  disconnectCarDB: () => {
+    return new Promise((res, rej) => {
+      setTimeout(() => {
+        res();
+      }, 500);
     });
   },
 };

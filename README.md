@@ -362,3 +362,118 @@
 ```
 
 <br />
+
+## 🔖 테스트 전후 작업
+### 🏃‍♂️ 1. beforeEach
+```js
+  let num = 0;
+  beforeEach(() => {
+    num = 0;
+  });
+  test("0 더하기 1은 1이야", () => {
+    num = fn.add(num, 1);
+    expect(num).toBe(1);
+  });
+```
+- beforeEach는 각 테스트가 실행할 때마다 실행되는 함수이다.
+
+<br />
+
+### 🏃‍♂️ 2. afterEach
+```js
+  let num = 0;
+  afterEach(() => {
+    num = 0;
+  });
+  test("0 더하기 1은 1이야", () => {
+    num = fn.add(num, 1);
+    expect(num).toBe(1);
+  });
+```
+- afterEach는 각 테스트가 종료할 때마다 실행되는 함수이다.
+
+<br />
+
+### 🏃‍♂️ 3. beforeAll/afterAll
+```js
+  beforeAll(async () => {
+    user = await fn.connectUserDB();
+  });
+  afterAll(() => {
+    return fn.disconnectDB;
+  });
+```
+- beforeAll은 전체 테스트를 기준으로 처음 테스트가 실행할 때 실행된다.
+- afterAll은 전체 테스트를 기준으로 테스트가 모두 종료될 때 실행된다.
+- db연결이나 종료는 처음과 끝에만 실행되면되서 매번 실행되는 beforeEach나 afterEach를 사용하기 보다는 beforeAll, afterAll을 사용하는 것이 좋다.
+
+<br />
+
+### 🏃‍♂️ 4. describe
+```js
+  describe("Car 관련 작업", () => {
+    let car = {};
+
+    beforeAll(async () => {
+      car = await fn.connectCarDB();
+    });
+    afterAll(() => {
+      return fn.disconnectCarDB;
+    });
+
+    test("이름은 Minjae", () => {
+      expect(car.brend).toBe("bmw");
+    });
+    test("나이는 27", () => {
+      expect(car.name).toBe("z4");
+    });
+    test("이름은 Minjae", () => {
+      expect(car.color).toBe("red");
+    });
+  });
+```
+- describe는 테스트 파일에 많은 수의 테스트 함수가 작성된 경우, 연관된 테스트 함수들끼리 그룹화하는 함수이다.
+- describe를 사용할 때 test함수 대신 `it`함수를 사용하기도 하는데, 이 두 함수는 완전한 동일한 기능을 하는 함수이다. Mocha나 Jasmin 같은 테스트 라이브러리에서 함수명을 it을 사용하기 때문에 Jest에서도 it을 test 함수의 별칭으로 제공한다.
+
+<br />
+
+### 🏃‍♂️ 4. only/skip
+```js
+  test.only("0더하기 5은 5야", () => {
+    expect(fn.add(num, 3)).toBe(5);
+  });
+  test.skip("0더하기 5은 5야", () => {
+    expect(fn.add(num, 3)).toBe(5);
+  });
+
+```
+- only와 skip은 테스트 코드를 디버깅할 때 유용하게 사용한다.
+- only는 테스트 파일안에 테스트 함수가 많은데 그 중에서 하나만 실패했을 경우, 그 함수만 단독으로 실행해보고 싶을 때 사용한다.
+- skip은 only의 반대로 작동한다. 어떤 함수만 빼고 실행해보고 싶을 때 사용한다.
+
+<br />
+
+## 🔖 실행 순서
+```js
+  beforeAll(() => console.log("밖 beforeAll")); // 1
+  beforeEach(() => console.log("밖 beforeEach")); // 2, 6
+  afterAll(() => console.log("밖 afterAll")); // 4, 10
+  afterEach(() => console.log("밖 afterEach")); // 마지막
+
+  test("2더하기 3은 5야", () => {
+    expect(fn.add(2, 3)).toBe(5); // 3
+  });
+
+  describe("Car 관련 작업", () => {
+    beforeAll(() => console.log("밖 beforeAll")); // 5
+    beforeEach(() => console.log("밖 beforeEach")); // 7
+    afterAll(() => console.log("밖 afterAll")); // 9
+    afterEach(() => console.log("밖 afterEach")); // 마지막-1
+
+    test("2더하기 3은 5야", () => {
+      expect(fn.add(2, 3)).toBe(5); // 8
+    });
+  });
+```
+
+<br />
