@@ -477,3 +477,159 @@
 ```
 
 <br />
+
+## 🔖 Mock
+### 🏃‍♂️ 1. mockFn.mock.calls
+```js
+  //fnMock.test.js
+  const mockFn = jest.fn();
+
+  function forEachAdd1(arr) {
+    arr.forEach((num) => {
+      mockFn(num + 1);
+    });
+  }
+
+  forEachAdd1([10, 20, 30]);
+
+  test("함수는 3번 호출된다.", () => {
+    expect(mockFn.mock.calls.length).toBe(3);
+  });
+
+  test("전달된 값은 11, 21, 31이다.", () => {
+    expect(mockFn.mock.calls[0][0]).toBe(11);
+    expect(mockFn.mock.calls[1][0]).toBe(21);
+    expect(mockFn.mock.calls[2][0]).toBe(31);
+  });
+
+  console.log(mockFn.mock.calls); // [[11], [21], [31]]
+```
+- mockFn.mock.calls에는 인자로 받아온 값들과 길이를 알 수 있다.
+
+<br />
+
+### 🏃‍♂️ 2. mockFn.mock.results
+```js
+  const mockFn = jest.fn((num) => num + 1);
+
+  mockFn(10);
+  mockFn(20);
+  mockFn(30);
+
+  test("10에서 1증가한 값이 반환된다.", () => {
+    expect(mockFn.mock.results[0].value).toBe(11);
+  });
+
+  test("20에서 1증가한 값이 반환된다.", () => {
+    expect(mockFn.mock.results[1].value).toBe(21);
+  });
+
+  test("30에서 1증가한 값이 반환된다.", () => {
+    expect(mockFn.mock.results[2].value).toBe(31);
+  });
+
+  console.log(mockFn.mock.results);
+  /* 
+    [
+      { type: 'return', value: 11 },
+      { type: 'return', value: 21 },
+      { type: 'return', value: 31 }
+    ]
+  */
+```
+- mockFn.mock.results는 리턴값을 확인할 수 있다.
+
+<br />
+
+### 🏃‍♂️ 3. mockReturnValueOnce/mockReturnValue
+```js
+  const mockFn = jest.fn();
+
+  mockFn.mockReturnValueOnce(10)
+    .mockReturnValueOnce(20)
+    .mockReturnValueOnce(30)
+    .mockReturnValue(40);
+  
+  mockFn();
+  mockFn();
+  mockFn();
+  mockFn();
+
+  test("dd", () => {
+    expect("dd").toBe("dd");
+  });
+
+  console.log(mockFn.mock.results);
+  /*
+    [
+      { type: 'return', value: 10 },
+      { type: 'return', value: 20 },
+      { type: 'return', value: 30 },
+      { type: 'return', value: 40 }
+    ]
+  */
+```
+- mockReturnValueOnce를 사용하면 mockFn이 실행될때마다 다른 값을 리턴이 가능하다. 마지막에는 Once를 생략한다.
+
+<br />
+
+### 🏃‍♂️ 4. mockResolvedValue
+```js
+  const mockFn = jest.fn();
+
+  mockFn.mockResolvedValue({ name: "Mike" });
+
+  test("받아온 이름은 Mike", () => {
+    mockFn().then((res) => {
+      expect(res.name).toBe("Mike");
+    });
+  });
+```
+- mockResolvedValue를 이용해서 비동기 함수를 테스트해볼 수도 있다.
+
+<br />
+
+### 🏃‍♂️ 5. mockReturnValue
+```js
+  const fn = require("../fnAsync");
+
+  jest.mock("../fnAsync");
+
+  fn.createUser.mockReturnValue({ name: "Mike" });
+
+  test("유저를 만든다.", () => {
+    const user = fn.createUser("Mike");
+    expect(user.name).toBe("Mike");
+  });
+```
+- 만약 db유저를 생성하는 테스트 코드를 실행할 때 실제로 db에 유저가 생성되면 안되기 때문에, `mockReturnValue`를 이용해서 실제 createUser가 실행되지않고 Mock 함수만 실행되게끔 할 수 있다.
+
+<br />
+
+### 🏃‍♂️ 6. toBeCalled, toBeCalledTimes, toBeCalledWith, lastCalledWith
+```js
+  const mockFn = jest.fn();
+
+  mockFn(10, 20);
+  mockFn();
+  mockFn(30, 40);
+
+  test("한번 이상 호출?", () => {
+    expect(mockFn).toBeCalled();
+  });
+  test("정확히 세번 호출?", () => {
+    expect(mockFn).toBeCalledTimes(3);
+  });
+  test("10이랑 20 전달받은 함수 있음?", () => {
+    expect(mockFn).toBeCalledWith(10, 20);
+  });
+  test("마지막 함수는 30이랑 40받음?", () => {
+    expect(mockFn).lastCalledWith(30, 40);
+  });
+```
+- toBeCalled는 한번 이상 호출됬으면 테스트가 통과된다.
+- toBeCalledTimes는 정확하게 호출 횟수가 맞으면 테스트가 통과된다.
+- toBeCalledWith는 인수로 어떤 값을 받았는지 체크한다.
+- lastCalledWith는 toBeCalledWith는처럼 인수로 어떤 값을 받았는지 체크하지만 맨 마지막으로 호출 된 함수만 체크한다.
+
+<br />
